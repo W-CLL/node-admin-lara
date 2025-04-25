@@ -8,17 +8,18 @@ use NodeAdmin\Models\AdminRolePermission;
 
 class AdminRoleService
 {
-    public function update(AdminRole $role,array $permissions){
-        DB::transaction(function () use ($permissions, $role){
+    public function update(AdminRole $role,$input){
+        DB::transaction(function () use ($input, $role){
+            $role->description = $input['description'];
             $role->save();
             if ($role->id == config('admin.super_admin_role_id')) {
                 return;
             }
             AdminRolePermission::query()->where('role_id',$role->id)->delete();
-            collect($permissions)->map(function ($permission) use ($role) {
+            collect($input)->map(function ($input) use ($role) {
                 $rp=new AdminRolePermission();
                 $rp->role_id=$role->id;
-                $rp->permission_id=$permission['id'];
+                $rp->permission_id=$input['id'];
                 $rp->save();
             });
         });

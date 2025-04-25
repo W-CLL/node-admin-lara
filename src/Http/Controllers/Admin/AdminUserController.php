@@ -36,7 +36,9 @@ class AdminUserController extends ResourceController
     {
         $users = AdminUser::query()->with('role')->paginate(10);
         foreach ($users as $user) {
-            $user->role_name=$user->role->name;
+            if($user->role){
+                $user->role_name=$user->role->name;
+            }
         }
         return $this->transformDataList($users);
     }

@@ -88,7 +88,7 @@ class RoleController extends ResourceController
 
     public function update(AdminRole $role,AdminRoleService $service)
     {
-        $service->update($role,request()->input('permissions'));
+        $service->update($role,request()->input());
         return new NodeResponse('保存成功');
     }
 

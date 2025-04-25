@@ -20,7 +20,8 @@ class AdminUser extends User
 
     protected $fillable = [
         'username',
-        'password'
+        'password',
+        'role_id'
     ];
 
     public function __construct(array $attributes = [])
