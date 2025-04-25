@@ -36,13 +36,13 @@ class Install extends Command
     private function _copyRoutes(){
         if (!$this->fs->exists(base_path('routes/admin.php'))){
             $this->fs->copy(NODE_ADMIN_PATH.'/route/admin.php',base_path('routes/admin.php'));
-            return;
+//            return;
         }
         $admin_content=$this->fs->get(base_path('routes/admin.php'));
         $preg='/(\/\/ auto add admin routes[\s\S]*\/\/ auto add admin routes end)/';
         preg_match($preg,$this->fs->get(NODE_ADMIN_PATH.'/route/admin.php'),$matches);
         $admin_content = preg_replace($preg, $matches[1], $admin_content);
-        $admin_content = str_replace('use App\Http\Controllers\Admin as AdminControllers;', 'use App\Http\Controllers as Controllers;', $admin_content);
+        $admin_content = str_replace( 'use NodeAdmin\Http\Controllers as Controllers;','use App\Http\Controllers\Admin as AdminControllers;', $admin_content);
         $admin_content = preg_replace(
             '/Controllers\\\\Admin\\\\([A-Za-z]+Controller)::class/',
             'AdminControllers\\\\$1::class',
