@@ -42,7 +42,13 @@ class Install extends Command
         $preg='/(\/\/ auto add admin routes[\s\S]*\/\/ auto add admin routes end)/';
         preg_match($preg,$this->fs->get(NODE_ADMIN_PATH.'/route/admin.php'),$matches);
         $admin_content = preg_replace($preg, $matches[1], $admin_content);
-        $admin_content = str_replace('use NodeAdmin\Http\Controllers as Controllers;', 'use App\Http\Controllers as Controllers;', $admin_content);
+        $admin_content = str_replace('use App\Http\Controllers\Admin as AdminControllers;', 'use App\Http\Controllers as Controllers;', $admin_content);
+        $admin_content = preg_replace(
+            '/Controllers\\\\Admin\\\\([A-Za-z]+Controller)::class/',
+            'AdminControllers\\\\$1::class',
+            $admin_content
+        );
+
         $this->fs->put(base_path('routes/admin.php'), $admin_content);
     }
 
